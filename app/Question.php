@@ -25,6 +25,8 @@ class Question extends Model
     {
       $this->attributes['title'] = $value;
       $this->attributes['slug'] = $value;
+      // Actually, but no longer supported in this version
+      // $this->attributes['slug'] = str_slug($value);
     }
 
 
