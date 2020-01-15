@@ -32,7 +32,7 @@ class Question extends Model
     // accessor
     public function getUrlAttribute()
     {
-      return route("questions.show", $this->id);
+      return route('questions.show', $this->id);
     }
 
     public function getCreatedDateAttribute()
