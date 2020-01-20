@@ -49,10 +49,10 @@ class QuestionsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Questions  $questions
+     * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function show(Questions $questions)
+    public function show(Question $question)
     {
         //
     }
@@ -60,24 +60,29 @@ class QuestionsController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Questions  $questions
+     * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function edit(Questions $questions)
+
+    // Finds question through sent id by itself to edit
+    public function edit(Question $question)
     {
         //
+        return view('questions.edit', compact('question'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Questions  $questions
+     * @param  \App\Question  $question
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Questions $questions)
+    public function update(AskQuestionRequest $request, Question $question)
     {
         //
+        $question->update($request->only('title', 'body'));
+        return redirect('/questions')->with('success', "your question has been updated.");
     }
 
     /**
