@@ -32,7 +32,7 @@ class Question extends Model
     // accessor
     public function getUrlAttribute()
     {
-      return route('questions.show', $this->id);
+      return route('questions.show', $this->slug);
     }
 
     public function getCreatedDateAttribute()
@@ -51,6 +51,14 @@ class Question extends Model
       else {
         return "unanswered";
       }
+    }
+
+    public function getBodyHtmlAttribute()
+    {
+      // His accent sucks
+      // Because the body will probably be in html syntax or something,
+      // We must parse it to normal human text
+      return \Parsedown::instance()->text($this->body);
     }
 
 }
