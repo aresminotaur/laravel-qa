@@ -33,14 +33,21 @@
                       <div class="media-body">
                         <div class="d-flex align-items-center">
                           <h3 class="mt-0"><a href="{{ $question->url }}">{{ $question->title }}</a></h3>
+                          @if(!Auth::guest())
                           <div class="ml-auto">
-                            <a href="{{route('questions.edit', $question->id)}}" class="btn btn-sm btn-outline-info">Edit</a>
-                            <form class="form-delete" action="{{route('questions.destroy', $question->id)}}" method="post">
-                              @method('DELETE') {{-- OLD WAY: {{method_field('DELETE')}} --}}
-                              @csrf {{-- OLD WAY: {{csrf_token()}} --}}
-                              <button type="submit" onclick="return confirm('are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
-                            </form>
+                            @if(Auth::user()->can('update-question', $question))
+                              <a href="{{route('questions.edit', $question->id)}}" class="btn btn-sm btn-outline-info">Edit</a>
+                            @endif
+
+                            @if(Auth::user()->can('delete-question', $question))
+                              <form class="form-delete" action="{{route('questions.destroy', $question->id)}}" method="post">
+                                @method('DELETE') {{-- OLD WAY: {{method_field('DELETE')}} --}}
+                                @csrf {{-- OLD WAY: {{csrf_token()}} --}}
+                                  <button type="submit" onclick="return confirm('are you sure?')" class="btn btn-sm btn-outline-danger">Delete</button>
+                              </form>
+                            @endif
                           </div>
+                          @endif
                         </div>
 
                         <p class="lead">

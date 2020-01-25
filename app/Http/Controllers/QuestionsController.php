@@ -71,8 +71,12 @@ class QuestionsController extends Controller
     // Finds question through sent id by itself to edit
     public function edit(Question $question)
     {
-        //
+        // authorization - no need to pass user id, laravel will handle that itself
+        if(\Gate::denies('update-question', $question)){
+          abort(403, "Access Denied");
+        }
         return view('questions.edit', compact('question'));
+
     }
 
     /**
@@ -85,6 +89,9 @@ class QuestionsController extends Controller
     public function update(AskQuestionRequest $request, Question $question)
     {
         //
+        if(\Gate::denies('update-question', $question)){
+          abort(403, "Access Denied");
+        }
         $question->update($request->only('title', 'body'));
         return redirect('/questions')->with('success', "your question has been updated.");
     }
@@ -97,6 +104,9 @@ class QuestionsController extends Controller
      */
     public function destroy(Question $question)
     {
+        if(\Gate::denies('delete-question', $question)){
+          abort(403, "Access Denied");
+        }
         $question->delete();
         return redirect('/questions')->with('success', "Your question has been deleted.");
     }

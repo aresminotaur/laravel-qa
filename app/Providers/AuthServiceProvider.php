@@ -25,6 +25,15 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        // Gate is a facade used for authentication
+        \Gate::define('update-question', function($user, $question) // Current user and question
+        {
+          return $user->id === $question->user_id;
+        });
+
+        \Gate::define('delete-question', function($user, $question) // Current user and question
+        {
+          return $user->id === $question->user_id;
+        });
     }
 }
