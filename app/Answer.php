@@ -24,4 +24,23 @@ class Answer extends Model
       return \Parsedown::instance()->text($this->body);
     }
 
+    // eloquent events
+    public static function boot()
+    {
+      parent::boot();
+
+      // When a record is created
+      static::created(function($answer)
+      {
+        $answer->question->increment('answers_count');
+        $answer->question->save();
+      });
+
+      // When a record is edited and saved OR created and saved
+      //    static::saved(function($answer)
+      //    {
+      //      echo "Answer saved\n";
+      //    });
+    }
+
 }
