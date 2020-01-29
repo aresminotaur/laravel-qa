@@ -41,9 +41,18 @@ class User extends Authenticatable
       return $this->hasMany(Question::class);
     }
 
+    // accessor
     public function getUrlAttribute()
     {
       return '#';
+    }
+
+    public function getAvatarAttribute()
+    {
+      // Pasting from gravatar.com
+      $email = "someone@somewhere.com";
+      $size = 32;
+      return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?s=" . $size;
     }
 
     // relationship between user and answers
@@ -51,4 +60,6 @@ class User extends Authenticatable
     {
       return $this->hasMany(Answer::class);
     }
+
+
 }

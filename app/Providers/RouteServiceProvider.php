@@ -33,8 +33,8 @@ class RouteServiceProvider extends ServiceProvider
     {
         // bind newly defined route for questions.show
         Route::bind('slug', function($slug){
-          $question = Question::where('slug', $slug)->first();
-          return $question ? $question : abort(404); 
+          $question = Question::with('answers.user')->where('slug', $slug)->first();
+          return $question ? $question : abort(404);
         });
 
         parent::boot();

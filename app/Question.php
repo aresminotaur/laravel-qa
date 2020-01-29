@@ -40,6 +40,15 @@ class Question extends Model
       return $this->created_at->diffForHumans();
     }
 
+    public function getAvatarAttribute()
+    {
+      // Pasting from gravatar.com
+      $email = "someone@somewhere.com";
+      $size = 32;
+      return "https://www.gravatar.com/avatar/" . md5( strtolower( trim( $email ) ) ) . "?s=" . $size;
+    }
+
+
     public function getStatusAttribute()
     {
       if($this->answers_count > 0){
