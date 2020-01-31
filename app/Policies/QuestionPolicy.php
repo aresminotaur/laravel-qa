@@ -34,7 +34,7 @@ class QuestionPolicy
     {
         // Confirm if user is authorized AND if questions has no answers
         // The question can only be deleted by the authorized user if it has no answers
-        return $user->id === $question->user_id && $question->answers < 1;
+        return $user->id === $question->user_id && $question->answers_count < 1;
     }
 
 }
