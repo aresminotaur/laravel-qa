@@ -39,6 +39,12 @@ class Answer extends Model
       return $this->created_at->diffForHumans();
     }
 
+    public function getStatusAttribute()
+    {
+      // see if answer is the best answer
+      return $this->question->best_answer_id === $this->id ? 'vote-accepted' : '';
+    }
+
     // eloquent events
     public static function boot()
     {
@@ -59,7 +65,14 @@ class Answer extends Model
       // When a record is deleted
       static::deleted(function($answer)
       {
-        $answer->question->decrement('answers_count');
+        $question = $answer->question;
+        $question->decrement('answers_count');
+        if($question->best_answer_id === $answer->id)
+        {
+            $question->best_answer_id = NULL;
+            $question->save();
+        }
+
       });
 
     }
