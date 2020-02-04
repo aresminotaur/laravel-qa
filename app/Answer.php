@@ -41,8 +41,7 @@ class Answer extends Model
 
     public function getStatusAttribute()
     {
-      // see if answer is the best answer
-      return $this->question->best_answer_id === $this->id ? 'vote-accepted' : '';
+      return $this->question->best_answer_id === $this->id ? 'answer-accepted' : '';
     }
 
     // eloquent events
@@ -65,14 +64,7 @@ class Answer extends Model
       // When a record is deleted
       static::deleted(function($answer)
       {
-        $question = $answer->question;
-        $question->decrement('answers_count');
-        if($question->best_answer_id === $answer->id)
-        {
-            $question->best_answer_id = NULL;
-            $question->save();
-        }
-
+        $answer->question->decrement('answers_count');
       });
 
     }
