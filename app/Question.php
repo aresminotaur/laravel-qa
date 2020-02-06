@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
+
+    // including trait
+    use VotableTrait;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -105,23 +109,24 @@ class Question extends Model
       return $this->favorites()->count();
     }
 
-    // relationship with votables table
-    public function votes()
-    {
-      return $this->morphToMany(User::class, 'votable');
-      // morphed to many users
-    }
-
-    public function upVotes()
-    {
-      // sum of all up votes
-      return $this->votes()->wherePivot('vote', 1);
-    }
-
-    public function downVotes()
-    {
-      // sum of all down votes
-      return $this->votes()->wherePivot('vote', -1);
-    }
+    // making redundant by using trait
+    // // relationship with votables table
+    // public function votes()
+    // {
+    //   return $this->morphToMany(User::class, 'votable');
+    //   // morphed to many users
+    // }
+    //
+    // public function upVotes()
+    // {
+    //   // sum of all up votes
+    //   return $this->votes()->wherePivot('vote', 1);
+    // }
+    //
+    // public function downVotes()
+    // {
+    //   // sum of all down votes
+    //   return $this->votes()->wherePivot('vote', -1);
+    // }
 
 }
