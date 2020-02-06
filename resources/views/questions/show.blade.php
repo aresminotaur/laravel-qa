@@ -27,10 +27,19 @@
                     <a title="This question is not useful" class="vote-down off">
                       <i class="fas fa-caret-down fa-3x"></i>
                     </a>
-                    <a title="Click to mark as favorite (Click again to undo)" class="favorite mt-3 favorited">
+                    <a title="Click to mark as favorite (Click again to undo)" class="favorite mt-3 {{ Auth::guest() ? 'off' : ($question->is_favorited ? 'favorited' : '') }}" onclick="event.preventDefault(); document.getElementById('favorite-question-{{ $question->id }}').submit();">
                       <i class="fas fa-star fa-3x"></i>
                     </a>
-                    <span class="favorites-count mt-1">123</span>
+                    <span class="favorites-count mt-1">{{ $question->favorites_count }}</span>
+                    <form style="" action="/questions/{{$question->id}}/favorites" method="post" id="favorite-question-{{ $question->id }}">
+                      @csrf
+                      {{-- if the question is not favorited only 'post' method will go --}}
+                      {{-- and if it is 'delete' will go too --}}
+                      @if ($question->is_favorited)
+                        @method('DELETE')
+                      @endif
+                    </form>
+
                   </div>
                   {{-- question body --}}
                   <div class="media-body">

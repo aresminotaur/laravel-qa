@@ -61,5 +61,11 @@ class User extends Authenticatable
       return $this->hasMany(Answer::class);
     }
 
+    public function favorites()
+    {
+      return $this->belongsToMany(Question::class, 'favorites')->withTimeStamps();
+      // timestamps() ensures timestamps are added also, duh
+    }
+
 
 }
