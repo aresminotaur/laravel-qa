@@ -13,6 +13,8 @@ $factory->define(App\Question::class, function (Faker $faker) {
         // Now that we're using eloquent event to create this value,
         // We don't need it in the factory
         // 'answers_count' => rand(0, 10),
-        'votes' => rand(-3, 10)
+        
+        // we're making the vote system dynamic, dont't need this anymore
+        // 'votes_count' => rand(-3, 10)
     ];
 });

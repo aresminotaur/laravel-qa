@@ -15,6 +15,30 @@ class Answer extends Model
         'body', 'user_id',
     ];
 
+    // eloquent events
+    public static function boot()
+    {
+      parent::boot();
+
+      // When a record is created
+      static::created(function($answer)
+      {
+        $answer->question->increment('answers_count');
+      });
+
+      // When a record is edited and saved OR created and saved
+      //    static::saved(function($answer)
+      //    {
+      //      echo "Answer saved\n";
+      //    });
+
+      // When a record is deleted
+      static::deleted(function($answer)
+      {
+        $answer->question->decrement('answers_count');
+      });
+
+    }
 
     // relationship between question and answers
     public function question()
@@ -54,29 +78,10 @@ class Answer extends Model
       return $this->question->best_answer_id === $this->id;
     }
 
-    // eloquent events
-    public static function boot()
+    // relationship with votables table
+    public function votes()
     {
-      parent::boot();
-
-      // When a record is created
-      static::created(function($answer)
-      {
-        $answer->question->increment('answers_count');
-      });
-
-      // When a record is edited and saved OR created and saved
-      //    static::saved(function($answer)
-      //    {
-      //      echo "Answer saved\n";
-      //    });
-
-      // When a record is deleted
-      static::deleted(function($answer)
-      {
-        $answer->question->decrement('answers_count');
-      });
-
+      return $this->morphToMany(User::class, 'votable');
+      // morphed to many users
     }
-
 }
