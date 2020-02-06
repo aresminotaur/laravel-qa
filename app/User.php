@@ -81,7 +81,7 @@ class User extends Authenticatable
       return $this->morphedByMany(Answer::class, 'votable');
       // user is morphed by question & answer model
     }
-    
+
     public function voteQuestion(Question $question, $vote)
     {
       // check if user has already voted; if not, we will add a row to table
@@ -106,5 +106,26 @@ class User extends Authenticatable
 
     }
 
+    public function voteAnswer(Answer $answer, $vote)
+    {
+      $voteAnswers = $this->voteAnswers();
+      $vote_exists = $voteAnswers->where('votable_id', $answer->id)->exists();
+      if ($vote_exists)
+      {
+              $voteAnswers->updateExistingPivot($answer, ['vote' => $vote]);
+      }
+      else
+      {
+          $voteAnswers->attach($answer, ['vote' => $vote]);
+      }
+
+      $answer->load('votes');
+      $downVotes = (int) $answer->downVotes()->sum('vote');
+      $upVotes = (int) $answer->upVotes()->sum('vote');
+
+      $answer->votes_count = $upVotes + $downVotes;
+      $answer->save();
+
+    }
 
 }
