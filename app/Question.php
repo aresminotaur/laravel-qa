@@ -81,7 +81,7 @@ class Question extends Model
     // relationship between question and answers
     public function answers()
     {
-      return $this->hasMany(Answer::class);
+      return $this->hasMany(Answer::class)->orderBy('votes_count', 'DESC');
     }
 
     // accepting best answer
