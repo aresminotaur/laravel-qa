@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Question extends Model
 {
@@ -32,6 +33,12 @@ class Question extends Model
       // Actually, but no longer supported in this version:
       // $this->attributes['slug'] = str_slug($value);
     }
+
+    // public function setBodyAttribute($value)
+    // {
+    //   // cleaning the input text before it is stored
+    //   $this->attributes['body'] = clean($value);
+    // }
 
     // accessor
     public function getUrlAttribute()
@@ -68,10 +75,7 @@ class Question extends Model
 
     public function getBodyHtmlAttribute()
     {
-      // His accent sucks
-      // Because the body will probably be in html syntax or something,
-      // We must parse it to normal human text
-      return \Parsedown::instance()->text($this->body);
+      return clean($this->bodyHtml());
     }
 
     // relationship between question and answers
@@ -108,6 +112,27 @@ class Question extends Model
     {
       return $this->favorites()->count();
     }
+
+    // because we donot want to change the length from the Model
+    // but would rather have it changed in the view
+    public function getExcerptAttribute()
+    {
+      return $this->excerpt(250);
+    }
+
+    public function excerpt($length)
+    {
+        return Str::limit(strip_tags($this->bodyHtml()), $length);
+    }
+
+    private function bodyHtml()
+    {
+      // His accent sucks
+      // Because the body will probably be in html syntax or something,
+      // We must parse it to normal human text
+      return \Parsedown::instance()->text($this->body);
+    }
+
 
     // making redundant by using trait
     // // relationship with votables table

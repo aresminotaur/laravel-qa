@@ -54,7 +54,15 @@
                           <a href="{{$question->user->url}}">{{$question->user->name}}</a>
                           <small class="text-muted">{{$question->created_date}}</small>
                         </p>
-                        {{ Str::limit($question->body, 250) }}
+                        <div class="excerpt">
+                            {{-- {!! Str::limit($question->body_html, 250) !!} --}}
+                            {{-- OR --}}
+                            {{-- better because turns every sort of language into pure string --}}
+                            {{-- and will not break if the limit exceeds 250 as it's predecessor would have --}}
+                            {{-- {{ Str::limit(strip_tags($question->body_html), 300) }} --}}
+                            {{-- making code much simpler --}}
+                            {{ $question->excerpt }}
+                        </div>
                       </div>
                     </div>
                     <hr>
